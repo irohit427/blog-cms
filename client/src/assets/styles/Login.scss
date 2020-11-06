@@ -1,0 +1,44 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .login-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 90%;
+    margin-top: 60px;
+    
+    .left-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  
+    .right-section {
+      border: 1px solid rgba(29, 29, 29, 0.2);
+      border-radius: 8px;
+      padding: 60px;
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      img {
+        width: 50%;
+        height: 50%;
+        opacity: 50%;
+      }
+  
+      form {
+        display: flex;
+        flex-direction: column;
+        padding: 10%;
+        div {
+          margin-bottom: 5px;
+          * {
+            padding-top: 5px;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,44 @@
+.dashboard-container {
+  padding-top: 90px;
+  padding-left: 90px;
+  padding-right: 40px;
+  
+  .header {
+    height: 40px;
+    .title {
+      display: inline;
+      vertical-align: middle;
+      text-align: center; 
+      line-height: 40px;
+    }
+    .layout-mode{
+      display: inline;
+      vertical-align: middle;
+      text-align: center; 
+      line-height: 40px;
+      float: right;
+    }
+  }
+
+  .content-section {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin: 0 auto;
+    padding:20px 40px;
+    flex-grow: 1;
+  }
+
+  .add-post > * {
+    width: 20%;
+    text-decoration: none;
+    
+    background-color: pink;
+    span {
+      font-size: 22px;
+      min-width: 320px;
+      min-height: 240px;
+    }
+  }
+}
