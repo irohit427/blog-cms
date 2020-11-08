@@ -28,5 +28,5 @@ passportConfig(passport);
 app.use('/api/admin/auth/', authRouter);
 connectDatabase();
 app.listen(4000, () => {
-  console.log("Listening on port 8000");
+  console.log("Listening on port 4000");
 })
