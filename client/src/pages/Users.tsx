@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Card, Form, Image, Input, Modal, Select } from 'antd';
 import Meta from 'antd/lib/card/Meta';
+import axiosInstance from '../utils/api';
 
 export default function Users() {
   const [ visibility, setVisibility ] = useState(false);
@@ -28,6 +29,19 @@ export default function Users() {
   const onFinishFailed = (errorInfo:any) => {
     console.log('Failed:', errorInfo);
   };
+  
+  let token:string = localStorage.getItem('token') || "";
+  console.log('Dashboard Token:', token);
+  token = token.replace(/"/g, "");
+
+  useEffect(() => {
+    axiosInstance.get('/api/admin/user/all',  {headers: {
+      "Authorization" : token
+    }
+    }).then(res => {
+      console.log(res.data)
+    })
+  })
   return (
     <div className="container">
       <h4>Users</h4>
