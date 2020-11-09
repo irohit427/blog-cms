@@ -10,6 +10,7 @@ import passportConfig from './config/passport';
 import authRouter from './routes/auth';
 import blogRouter from './routes/blog';
 import userRouter from './routes/user';
+import publicRouter from './routes/public';
 
 const app = express();
 app.use(express.json());
@@ -27,6 +28,7 @@ app.use(cors());
 app.use(morgan('dev'));
 passportConfig(passport);
 
+app.use('/', publicRouter);
 app.use('/api/admin/auth/', authRouter);
 app.use('/api/v1/admin/blog/',passport.authenticate('jwt', {session: false}), blogRouter);
 app.use('/api/admin/user/', passport.authenticate('jwt', {session: false}), userRouter);
