@@ -74,7 +74,7 @@ export default function AddBlog() {
 
   const handleSave = (e: any) => {
     e.preventDefault();
-    axiosInstance.post('/v1/blog',  
+    axiosInstance.post('/api/v1/admin/blog',  
     {
       title,
       content: editorHtml,

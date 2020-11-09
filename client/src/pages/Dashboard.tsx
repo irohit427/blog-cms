@@ -38,6 +38,15 @@ export default function Dashboard() {
     })
   })
 
+  useEffect(() => {
+    axiosInstance.get('/api/v1/admin/blog/',  {headers: {
+      "Authorization" : token
+    }
+    }).then(res => {
+      console.log(res.data)
+    })
+  })
+
   return (
     <div>
       <MiniDrawer />
