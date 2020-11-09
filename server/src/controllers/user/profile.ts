@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-const profile = (req: Request, res: Response, next: any) => {
+const profile = (req: Request, res: Response) => {
   let token = req.headers.authorization
   return res.status(200).json({
     message: 'User Profile',

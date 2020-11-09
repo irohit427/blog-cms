@@ -30,7 +30,7 @@ export default function Dashboard() {
   token = token.replace(/"/g, "");
 
   useEffect(() => {
-    axiosInstance.get('/api/admin/profile',  {headers: {
+    axiosInstance.get('/api/admin/user/profile',  {headers: {
       "Authorization" : token
     }
     }).then(res => {

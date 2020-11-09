@@ -73,7 +73,8 @@ export default function AddBlog() {
   token = token.replace(/"/g, "");
 
   const handleSave = (e: any) => {
-    axiosInstance.post('/api/admin/blog',  
+    e.preventDefault();
+    axiosInstance.post('/v1/blog',  
     {
       title,
       content: editorHtml,

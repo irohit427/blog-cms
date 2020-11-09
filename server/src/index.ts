@@ -28,8 +28,8 @@ app.use(morgan('dev'));
 passportConfig(passport);
 
 app.use('/api/admin/auth/', authRouter);
-app.use('/api/admin', passport.authenticate('jwt', {session: false}), blogRouter);
-app.use('/api/admin/', passport.authenticate('jwt', {session: false}), userRouter);
+app.use('/v1/', blogRouter);
+app.use('/api/admin/user/', passport.authenticate('jwt', {session: false}), userRouter);
 connectDatabase();
 app.listen(4000, () => {
   console.log("Listening on port 4000");

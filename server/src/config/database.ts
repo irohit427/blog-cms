@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 const MONGO_URI = 'mongodb+srv://rohit123:shlocked221b@cluster0.uqlap.mongodb.net/blogDB?retryWrites=true&w=majority'
 
 const connectDatabase = () => {
+  mongoose.Promise = global.Promise;
   mongoose.connect(MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

@@ -2,6 +2,7 @@ import passportLocal from 'passport-local';
 import bcrypt from 'bcryptjs';
 import User from '../models/User';
 import { Strategy, ExtractJwt } from 'passport-jwt';
+import e from 'express';
 
 
 const LocalStrategy = passportLocal.Strategy;
@@ -52,17 +53,16 @@ const passportConfig = (passport: any) => {
         secretOrKey: 'TOP_SECRET',
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
       },
-      async (payload, done) => {
-        try {
-          await User.findOne({_id: payload.user._id}).then((user: any) => {
+      (payload, done) => {
+        User.findOne({_id: payload.user._id}).then((user: any) => {
             if (user) {
-              return done(null, {id: user.id, username: user.username, email: user.email});
+               done(null, {id: user.id, username: user.username, email: user.email});
+            } else {
+              done(null, false);
             }
-          })
-          return done(null, false);
-        } catch (error) {
-          done(error);
-        }
+          }).catch (error => {
+           done(error);
+        })
       }
     )
   );
