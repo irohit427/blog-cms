@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import MiniDrawer from '../components/AppBar/AppBar'
 import BlogCard from '../components/Card/Card'
 import '../assets/styles/Dashboard.scss'
@@ -8,6 +8,7 @@ import StoryCard from '../components/Card/Card'
 import background from '../assets/images/background.png'
 import background_2 from '../assets/images/backgroung_2.jpg'
 import { Link } from 'react-router-dom'
+import axiosInstance from '../utils/api'
 
 const useStyles = makeStyles({
   root: {
@@ -24,6 +25,19 @@ const useStyles = makeStyles({
 export default function Dashboard() {
   const classes = useStyles();
   const description = 'Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica';
+  let token:string = localStorage.getItem('token') || "";
+  console.log('Dashboard Token:', token);
+  token = token.replace(/"/g, "");
+
+  useEffect(() => {
+    axiosInstance.get('/api/admin/profile',  {headers: {
+      "Authorization" : token
+    }
+    }).then(res => {
+      console.log(res.data)
+    })
+  })
+
   return (
     <div>
       <MiniDrawer />

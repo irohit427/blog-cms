@@ -17,7 +17,7 @@ const login = async (req: any, res: any, next: any) => {
           username: user.username,
           email: user.email
         }
-        const token = jwt.sign({user: userInfo}, 'TOP_SECRET', {expiresIn: 3600});
+        const token = jwt.sign({user: userInfo}, 'TOP_SECRET', {expiresIn: '3600s'});
         return res.json({success: true, token: `Bearer ${token}`, userInfo});
       });
     } catch (err) {

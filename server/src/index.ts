@@ -8,6 +8,8 @@ import dotenv from 'dotenv';
 import connectDatabase from './config/database';
 import passportConfig from './config/passport';
 import authRouter from './routes/auth';
+import blogRouter from './routes/blog';
+import userRouter from './routes/user';
 
 const app = express();
 app.use(express.json());
@@ -26,6 +28,8 @@ app.use(morgan('dev'));
 passportConfig(passport);
 
 app.use('/api/admin/auth/', authRouter);
+app.use('/api/admin', passport.authenticate('jwt', {session: false}), blogRouter);
+app.use('/api/admin/', passport.authenticate('jwt', {session: false}), userRouter);
 connectDatabase();
 app.listen(4000, () => {
   console.log("Listening on port 4000");

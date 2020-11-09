@@ -25,8 +25,10 @@ export const Context = createContext<{
 const reducer = (state: any, action: any) => {
   switch(action.type) {
     case 'LOGIN':
+      localStorage.clear();
       localStorage.setItem("user", JSON.stringify(action.payload.userInfo));
       localStorage.setItem("token", JSON.stringify(action.payload.token));
+      console.log('Token:', action.payload.token);
       localStorage.setItem("isAuthenticated", JSON.stringify(!!action.payload.token));
       return {
         ...state,

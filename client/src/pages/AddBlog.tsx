@@ -1,4 +1,5 @@
 import { Button, Input, Modal, Tag } from 'antd';
+import { title } from 'process';
 import { TweenOneGroup } from 'rc-tween-one';
 import React, { useState } from 'react'
 import ReactQuill from 'react-quill'
@@ -68,11 +69,19 @@ export default function AddBlog() {
     setPreview(false);
   }
 
+  let token:string = localStorage.getItem('token') || "";
+  token = token.replace(/"/g, "");
+
   const handleSave = (e: any) => {
-    axiosInstance.post('/api/admin/blog', {
+    axiosInstance.post('/api/admin/blog',  
+    {
       title,
-      content: editorHtml
-    }).then((res: any) => {
+      content: editorHtml,
+      tags: tags.join(',')
+    },
+    {headers: {
+      "Authorization" : token
+    }}).then((res: any) => {
       console.log(res);
       history.push('/dashboard');
     }).catch(err => console.log(err));

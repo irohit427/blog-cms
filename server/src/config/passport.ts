@@ -53,7 +53,6 @@ const passportConfig = (passport: any) => {
         jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
       },
       async (payload, done) => {
-        console.log(payload.user._id);
         try {
           await User.findOne({_id: payload.user._id}).then((user: any) => {
             if (user) {
