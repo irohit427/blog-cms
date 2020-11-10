@@ -1,10 +1,11 @@
-import { Button, Input, Modal, Tag } from 'antd';
+import { Button, Input, Modal, Popover, Tag, Tooltip } from 'antd';
 import { title } from 'process';
 import { TweenOneGroup } from 'rc-tween-one';
 import React, { useState } from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css';
 import { useHistory } from 'react-router-dom';
+import MiniDrawer from '../components/AppBar/AppBar';
 import Heading from '../components/Heading';
 import axiosInstance from '../utils/api';
 import './AddBlog.scss'
@@ -119,10 +120,14 @@ export default function AddBlog() {
   return (
     <div className="blog-container">
       <Heading text="Add Blog" size="36" weight="bold" />
-      <div className="editor-section" style={{width: '700px'}}>
-        <div className="editor" style={{width: '400px'}}>
-          <Input type="text" placeholder="Title..." style={{width: '400px'}} onChange={ e =>setTitle(e.target.value) }/>
-          <div style={{ marginBottom: 16 }}>
+      <div className="editor-section" style={{width: '90%'}}>
+        <Input className="title" type="text" placeholder="Title..." style={{width: '600px'}} bordered={false} onChange={ e =>setTitle(e.target.value) }/>
+        <div className="covers">
+          <Tooltip title="Cover">
+            <Button shape="circle">+</Button>
+          </Tooltip>
+        </div>
+        <div className="tags">
           <TweenOneGroup
             enter={{
               scale: 0.8,
@@ -139,50 +144,49 @@ export default function AddBlog() {
             {tagChild}
           </TweenOneGroup>
           {inputVisible && (
-          <Input
-            type="text"
-            ref={input => input && input.focus()}
-            size="small"
-            style={{ width: 78 }}
-            value={inputValue}
-            onChange={handleInputChange}
-            onBlur={handleInputConfirm}
-            onPressEnter={handleInputConfirm}
-          />
-        )}
-        {!inputVisible && (
-          <Tag onClick={showInput} className="site-tag-plus">
-            + New Tag
-          </Tag>
-        )}
-        </div>
-          <ReactQuill 
-            theme='snow'
-            onChange={setEditorHtml}
-            value={editorHtml}
-            modules={modules}
-            formats={formats}
-            placeholder='Write Something...'
-            style={{width: "400px", backgroundColor: 'green'}}
-          />
-        </div>
-        <div className="preview" style={{width: "400px", wordWrap: 'break-word', backgroundColor: 'red'}}>
-          <p dangerouslySetInnerHTML={{__html: editorHtml}}></p>
-        </div>
+            <Input
+              type="text"
+              ref={input => input && input.focus()}
+              size="small"
+              style={{ width: 78 }}
+              value={inputValue}
+              onChange={handleInputChange}
+              onBlur={handleInputConfirm}
+              onPressEnter={handleInputConfirm}
+            />
+          )}
+          {!inputVisible && (
+            <Tag onClick={showInput} className="site-tag-plus">
+              + New Tag
+            </Tag>
+          )}
       </div>
-
-       {/* <Button type="primary" onClick={handlePreview}>Preview</Button> */}
-       <Button onClick={handleSave} type="primary">Save</Button>
-       {/* <Modal
-          title="Preview"
-          visible={preview}
-          onOk={handleModal}
-          onCancel={handleModal}
-          closable={true}
-          footer={null}
-        >
-          <div dangerouslySetInnerHTML={{__html: editorHtml}}></div>
-        </Modal> */}
+      <div className="editor">
+        <ReactQuill 
+          theme='snow'
+          onChange={setEditorHtml}
+          value={editorHtml}
+          modules={modules}
+          formats={formats}
+          placeholder='Write Something...'
+        />
+      </div>
     </div>
-  )
+    <div className="button-bar">
+      <Button type="primary" onClick={handlePreview}>Preview</Button>
+      <Button onClick={handleSave} type="primary">Save</Button>
+      <Button onClick={handleSave} type="primary">Save & Publish</Button>
+    </div>
+    <Modal
+      title="Preview"
+      visible={preview}
+      onOk={handleModal}
+      onCancel={handleModal}
+      closable={true}
+      footer={null}
+      width={'90%'}
+    >
+      <div dangerouslySetInnerHTML={{__html: editorHtml}}></div>
+    </Modal>
+  </div>)
 }

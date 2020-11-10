@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import MiniDrawer from '../components/AppBar/AppBar'
 import BlogCard from '../components/Card/Card'
 import '../assets/styles/Dashboard.scss'
@@ -15,8 +15,8 @@ const useStyles = makeStyles({
     marginBottom: '18px'
   },
   add: {
-    minWidth: 320,
-    maxWidth: 320,
+    minWidth: 240,
+    maxWidth: 240,
     paddingTop: 173,
     paddingBottom: 173,
   }
@@ -28,12 +28,16 @@ export default function Dashboard() {
   let token:string = localStorage.getItem('token') || "";
   console.log('Dashboard Token:', token);
   token = token.replace(/"/g, "");
+  const [username, setUsername] = useState('');
+  const [role, setRole] = useState('');
 
   useEffect(() => {
     axiosInstance.get('/api/admin/user/profile',  {headers: {
       "Authorization" : token
     }
     }).then(res => {
+      setUsername(res.data.user.username);
+      setRole(res.data.user.role);
       console.log(res.data)
     })
   })
@@ -49,7 +53,7 @@ export default function Dashboard() {
 
   return (
     <div>
-      <MiniDrawer />
+      <MiniDrawer username={username} role={role}/>
       <div className="dashboard-container">
         <div className="header">
           <div className="title">Recent Activity</div>
@@ -87,7 +91,7 @@ export default function Dashboard() {
           <Link to="/add-blog">
             <Grid item className={classes.root}>
               <Card className={classes.add} elevation={5}>
-                <CardContent style={{}}>
+                <CardContent>
                   <IconButton disableRipple style={{ backgroundColor: 'transparent', paddingLeft: 120 }}>
                     <Add />
                   </IconButton>

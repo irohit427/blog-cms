@@ -17,11 +17,18 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
-import { Badge, Button, Card, CardActions, CardContent, Paper } from '@material-ui/core';
 import { AccountCircle } from '@material-ui/icons';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import { Link } from 'react-router-dom';
-
+import { Link, NavLink } from 'react-router-dom';
+import { Popover } from 'antd';
+import { Context } from '../../context';
+import { useHistory } from 'react-router-dom';
+import DeleteIcon from '@material-ui/icons/Delete';
+import DraftsIcon from '@material-ui/icons/Drafts';
+import PublishIcon from '@material-ui/icons/Publish';
+import DescriptionIcon from '@material-ui/icons/Description';
+import { ClickAwayListener } from '@material-ui/core';
+import GroupIcon from '@material-ui/icons/Group';
+import './AppBar.scss'
 
 const drawerWidth = 240;
 
@@ -98,25 +105,50 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export default function MiniDrawer() {
+interface ChildComponentProps {
+  username: string,
+  role: string
+}
+
+const MiniDrawer: React.FC<ChildComponentProps> = ({ username, role }) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const { dispatch } = React.useContext(Context); 
+  const history = useHistory();
 
   const handleDrawerOpen = () => {
     setOpen(true);
   };
 
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handleLogout = (e: any) => {
+    e.preventDefault();
+    dispatch({
+      type: 'LOGOUT'
+    })
+    history.push('/admin');
+  }
 
   const handleDrawerClose = () => {
     setOpen(false);
   };
 
   const menuId = 'primary-search-account-menu';
+
+  const content = (
+    <div style={{width: '100px', padding: '4px'}}>
+      <div style={{paddingBottom: '8px'}}>
+        <i className="fas fa-user" />
+        <span>Profile</span>
+      </div>
+      <a>
+        <div onClick={handleLogout}>
+          <i className="fas fa-sign-out-alt" />
+            <span>Logout</span>
+        </div>
+      </a>
+    </div>
+  );
 
   return (
     <div className={classes.root}>
@@ -146,31 +178,32 @@ export default function MiniDrawer() {
           </Link>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
+            <Popover content={content} placement="bottomRight" trigger="hover">
+              <div>
+                <span style={{ fontSize: '16px', fontWeight: 'bold' }}>{username}</span>
+                <IconButton
+                  edge="end"
+                  aria-label="account of current user"
+                  aria-controls={menuId}
+                  aria-haspopup="true"
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>
+              </div>
+              
+            </Popover>
+            
           </div>
         </Toolbar>
       </AppBar>
+      <ClickAwayListener 
+      mouseEvent="onMouseDown"
+      touchEvent="onTouchStart"
+      onClickAway={handleDrawerClose}>
       <Drawer
         variant="permanent"
+        onKeyUp={handleDrawerClose}
         className={clsx(classes.drawer, {
           [classes.drawerOpen]: open,
           [classes.drawerClose]: !open,
@@ -189,27 +222,28 @@ export default function MiniDrawer() {
         </div>
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
+          {[{title: 'Recent Blogs', icon: <DescriptionIcon />}, {title: 'Published', icon: <PublishIcon />}, {title: 'Drafts', icon: <DraftsIcon />}, {title: 'Trash', icon: <DeleteIcon />}].map((section, index) => (
+            <ListItem button key={index}>
+              <ListItemIcon>{section.icon}</ListItemIcon>
+              <ListItemText primary={section.title} />
             </ListItem>
           ))}
         </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
+        {
+          role === "admin" && (<div>
+              <Divider />
+              <NavLink to="/users" >
+                <ListItem>
+                <ListItemIcon><GroupIcon /></ListItemIcon>
+                    <ListItemText primary='Users' />
+                </ListItem>
+              </NavLink>
+            </div>)
+        }
       </Drawer>
-      {/* <main className={classes.content}>
-        <div className={classes.toolbar} />
-        Recent Activity
-      </main> */}
+      </ClickAwayListener>
     </div>
   );
 }
+
+export default MiniDrawer;

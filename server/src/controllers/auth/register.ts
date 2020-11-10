@@ -4,7 +4,7 @@ import { UserInterface } from '../../interface/User';
 import User from '../../models/User';
 
 const register = async (req: Request, res: Response) => {
-  const { password, email } = req.body;
+  const { password, email, role } = req.body;
 
   User.findOne({ email }, async (err, user: UserInterface) => {
     if (err) throw err;
@@ -15,7 +15,8 @@ const register = async (req: Request, res: Response) => {
       const newUser = new User({
         username: email.split('@')[0],
         email: email,
-        password: hashedPassword
+        password: hashedPassword,
+        role
       });
       await newUser.save().then(u => {
         res.status(200).json({u})

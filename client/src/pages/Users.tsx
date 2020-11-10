@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Button, Card, Form, Image, Input, Modal, Select } from 'antd';
 import Meta from 'antd/lib/card/Meta';
 import axiosInstance from '../utils/api';
+import MiniDrawer from '../components/AppBar/AppBar';
 
 export default function Users() {
   const [ visibility, setVisibility ] = useState(false);
@@ -44,6 +45,7 @@ export default function Users() {
   })
   return (
     <div className="container">
+      <MiniDrawer username='admin' role='admin' />
       <h4>Users</h4>
       <Button type="primary" shape="circle" onClick={openAddUserModal}>
         <i className="fas fa-plus"></i>

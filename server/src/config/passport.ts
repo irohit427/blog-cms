@@ -56,7 +56,7 @@ const passportConfig = (passport: any) => {
       (payload, done) => {
         User.findOne({_id: payload.user._id}).then((user: any) => {
             if (user) {
-               done(null, {id: user.id, username: user.username, email: user.email});
+               done(null, {id: user.id, username: user.username, email: user.email, role: user.role});
             } else {
               done(null, false);
             }

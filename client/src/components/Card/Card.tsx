@@ -12,12 +12,12 @@ import { Delete, Edit } from '@material-ui/icons';
 
 const useStyles = makeStyles({
   root: {
-    minWidth: 320,
-    maxWidth: 320,
+    minWidth: 240,
+    maxWidth: 240,
     marginRight: 10
   },
   media: {
-    height: 240,
+    height: 180,
   },
   actions: {
     float: 'right',
