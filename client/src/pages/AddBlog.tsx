@@ -23,15 +23,8 @@ export default function AddBlog() {
   const [ tags, setTags ] = useState([]);
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState('')
-  const config = {
-    bucketName: 'ir-blog-cms',
-    dirName: 'photos', /* optional */
-    region: 'us-east-2',
-    accessKeyId: 'AKIATKLQCRDAHIY3UZGJ',
-    secretAccessKey: '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',
-  }
 
-  const ReactS3Client = new S3(config);
+  const ReactS3Client = new S3();
 
 
   const handleClose = (removedTag: any) => {
