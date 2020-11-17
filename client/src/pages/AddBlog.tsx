@@ -1,4 +1,4 @@
-import { Button, Input, Modal, Popover, Tag, Tooltip } from 'antd';
+import { Button, Input, Modal, Popover, Tag, Tooltip, Upload } from 'antd';
 import { title } from 'process';
 import { TweenOneGroup } from 'rc-tween-one';
 import React, { useState } from 'react'
@@ -8,6 +8,10 @@ import { useHistory } from 'react-router-dom';
 import MiniDrawer from '../components/AppBar/AppBar';
 import Heading from '../components/Heading';
 import axiosInstance from '../utils/api';
+// import S3FileUpload from 'react-s3';
+import S3 from 'react-aws-s3';
+
+
 import './AddBlog.scss'
 
 
@@ -19,6 +23,16 @@ export default function AddBlog() {
   const [ tags, setTags ] = useState([]);
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState('')
+  const config = {
+    bucketName: 'ir-blog-cms',
+    dirName: 'photos', /* optional */
+    region: 'us-east-2',
+    accessKeyId: 'AKIATKLQCRDAHIY3UZGJ',
+    secretAccessKey: '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',
+  }
+
+  const ReactS3Client = new S3(config);
+
 
   const handleClose = (removedTag: any) => {
     const _tags = tags.filter(tag => tag !== removedTag);
@@ -115,17 +129,46 @@ export default function AddBlog() {
     setPreview(true);
   }
 
-  const tagChild = tags.map(forMap);
+  // const [ fileList, setFileList ] = useState([]);
+  
+  const handleChange = ( e: any) => {
+    e.preventDefault();
+    let file = e.target.files[0];
+    ReactS3Client
+    .uploadFile(file)
+    .then(data => console.log(data))
+    .catch(err => console.error(err))
 
+    // setFileList(fileList);
+  }
+
+  const tagChild = tags.map(forMap);
+  // const uploadButton = (
+  //   <div>
+  //     +
+  //     <div style={{ marginTop: 8 }}>Upload</div>
+  //   </div>
+  // );
   return (
     <div className="blog-container">
       <Heading text="Add Blog" size="36" weight="bold" />
       <div className="editor-section" style={{width: '90%'}}>
         <Input className="title" type="text" placeholder="Title..." style={{width: '600px'}} bordered={false} onChange={ e =>setTitle(e.target.value) }/>
         <div className="covers">
-          <Tooltip title="Cover">
+          <input type="file" onChange={handleChange} />
+
+        {/* <Upload
+          action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+          listType="picture-card"
+          fileList={fileList}
+          onChange={handleChange}
+        >
+          {fileList.length >= 8 ? null : uploadButton}
+        </Upload> */}
+          {/* <Tooltip title="Cover">
             <Button shape="circle">+</Button>
-          </Tooltip>
+          </Tooltip> */}
+
         </div>
         <div className="tags">
           <TweenOneGroup
